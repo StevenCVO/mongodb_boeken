@@ -7,7 +7,9 @@ const boeken = require("./routes/boeken");
 
 // Connectie maken met MongoDB databank
 mongoose.connect("mongodb://127.0.0.1:27017/boekendb", {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useFindAndModify: true,
+    useCreateIndex: true
 })
     .then(() => {
         console.log("Verbonden met Mongodb.");        

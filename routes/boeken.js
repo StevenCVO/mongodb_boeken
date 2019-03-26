@@ -51,4 +51,25 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
+router.put("/:id", async (req, res) => {
+    const data = req.body;
+
+    try {
+        const gewijzigdBoek = await Boek.findByIdAndUpdate(
+            req.params.id,
+            data, {
+                runValidators: true,    // Voer Schema validatie ook uit
+                new: true   // Geef het aangepaste document terug (anders het oude)
+            });
+
+        if (!gewijzigdBoek) {
+            return res.status(404).send(`Boek met id ${req.params.id} niet gevonden.`);
+        }
+
+        return res.send(gewijzigdBoek);
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+});
+
 module.exports = router;
