@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 // Destructuring om de klasse Schema en functie model
 // uit het mongoose object te halen
 const { Schema, model } = mongoose;
+const Auteur = require("./auteur");
 
 // Schema
 const boekSchema = new Schema({
@@ -10,6 +11,10 @@ const boekSchema = new Schema({
         type: String,
         required: true,
         maxlength: 150
+    },
+    auteur: {
+        type: Schema.Types.ObjectId,
+        ref: Auteur
     },
     aantalPaginas: {
         type: Number,
@@ -32,13 +37,34 @@ const boekSchema = new Schema({
         type: String,
         unique: true,
         validate: { // Custom validator (eigen logica schrijven)
-            validator: function(waarde) {
+            validator: function(waarde) {                
                 return (waarde.length === 10 || waarde.length === 13);
             },
             message: "Verkeerd formaat ISBN"
+        },
+        // Set eigenschap neemt een functie aan die de uiteindelijke
+        // waarde bepaalt die naar de databank geschreven wordt
+        set: function(waarde) {
+            return waarde
+                .replace(/-/g, "") // Regex met optie 'g' voor globaal
+                .replace(/ /g, "")
+                .trim(); // Spaties vooraan en achteraan weghalen
+        },
+        // Match vergelijkt de string met een regex (zoek op internet)
+        // match: /(?=(?:\D*\d){10})(?:(?:\D*\d){3})?$/
+    },
+    vertaling: {
+        type: Boolean,
+        default: false
+    },
+    taalOrigineel: {
+        type: String,
+        required: function() {
+            return this.vertaling;
         }
     }
-
+}, {
+    timestamps: true    // Toevoegen van timestamps bij aanmaken en updaten
 });
 
 // Model

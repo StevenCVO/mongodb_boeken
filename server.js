@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 // Routers importeren
 const boeken = require("./routes/boeken");
+const auteurs = require("./routes/auteurs");
 
 // Connectie maken met MongoDB databank
 mongoose.connect("mongodb://127.0.0.1:27017/boekendb", {
@@ -29,6 +30,7 @@ app.use(express.json());
 
 // Router registreren
 app.use("/boeken", boeken);
+app.use("/auteurs", auteurs);
 
 app.get("/", (req, res) => {
     res.send("Gebruik de API routes.");

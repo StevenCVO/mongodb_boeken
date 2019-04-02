@@ -7,8 +7,13 @@ const router = express.Router();
 
 // async toevoegen aan functie om await te kunnen gebruiken
 router.get("/", async (req, res) => {
+    const sorteerRichting = req.query.sort;
+
+
     // Data uit databank halen
-    const boeken = await Boek.find();
+    const boeken = await Boek.find().sort({
+        "titel": sorteerRichting
+    });
 
     return res.send(boeken);
 });
