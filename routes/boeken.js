@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
 
 
     // Data uit databank halen
-    const boeken = await Boek.find().sort({
+    const boeken = await Boek.find().populate("auteur").sort({
         "titel": sorteerRichting
     });
 
