@@ -28,7 +28,8 @@ router.post("/", async (req, res) => {
     
         // Sla het nieuw boek op in de databank en geef het nieuwe boek
         // inclusief id ook terug
-        const toegevoegdBoek = await Boek.create(nieuwBoek);
+        let toegevoegdBoek = await Boek.create(nieuwBoek);
+        toegevoegdBoek = await toegevoegdBoek.populate("auteur").execPopulate();
     
         return res.send(toegevoegdBoek);
     } catch (err) {
@@ -65,7 +66,7 @@ router.put("/:id", async (req, res) => {
             data, {
                 runValidators: true,    // Voer Schema validatie ook uit
                 new: true   // Geef het aangepaste document terug (anders het oude)
-            });
+            }).populate("auteur");
 
         if (!gewijzigdBoek) {
             return res.status(404).send(`Boek met id ${req.params.id} niet gevonden.`);

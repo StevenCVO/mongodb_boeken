@@ -35,7 +35,7 @@ const boekSchema = new Schema({
     },
     isbn: {
         type: String,
-        unique: true,
+        //unique: true,
         validate: { // Custom validator (eigen logica schrijven)
             validator: function(waarde) {                
                 return (waarde.length === 10 || waarde.length === 13);
